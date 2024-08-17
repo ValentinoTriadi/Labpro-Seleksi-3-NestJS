@@ -1,0 +1,6 @@
+title;description;director;release_year;genre;price;duration;video_url;cover_image_url
+Film1;description Film 1;director 1;2020;genre1-genre2-genre3;100;120;vid_url_1;img_url_1
+Film2;description Film 2;director 2;2021;genre1-genre2-genre4;300;200;vid_url_2;img_url_2
+Film3;description Film 3;director 3;2022;genre1-genre2-genre5;230;150;vid_url_3;
+Film4;description Film 4;director 4;2023;genre1-genre2-genre6;150;70;vid_url_4;img_url_4
+Film5;description Film 5;director 5;2024;genre1-genre2-genre7;200;90;vid_url_5;

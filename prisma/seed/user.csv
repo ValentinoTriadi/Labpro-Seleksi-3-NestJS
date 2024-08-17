@@ -1,0 +1,4 @@
+username;email;firstName;lastName;password;balance;role;films
+Admin;Admin@example.com;Admin;Nimda;123123;1000;ADMIN;
+User1;User1@example.com;User;Name1;123123;500;USER;
+User2;User2@example.com;User;Name2;123123;1500;USER;
