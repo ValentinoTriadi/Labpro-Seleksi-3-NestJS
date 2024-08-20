@@ -1,4 +1,4 @@
 username;email;firstName;lastName;password;balance;role;films
-Admin;Admin@example.com;Admin;Nimda;123123;1000;ADMIN;
-User1;User1@example.com;User;Name1;123123;500;USER;
-User2;User2@example.com;User;Name2;123123;1500;USER;
+admin;Admin@example.com;Admin;Nimda;$2a$10$abGEc3jcdHgGuausJQURJOvjMjcRXlMuvGnoNCEou6fF/HnHVO5.K;1000;ADMIN;
+User1;User1@example.com;User;Name1;$2a$10$FKY9nktYiXUpG4Ng2696JuECEu5f00d/diXFYvhMCnpEIJgMs/vrq;500;USER;
+User2;User2@example.com;User;Name2;$2a$10$DkD2vMy9kRy/KojCrYnsLe8b.TK3uYBzoXPbxyahbfQ3NFMJV0I0i;1500;USER;
