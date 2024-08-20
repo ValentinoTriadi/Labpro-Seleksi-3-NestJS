@@ -96,4 +96,20 @@ export class AuthService {
       data: null,
     };
   }
+
+  async getUsers(q?: string) {
+    return await this.userService.findAll(q);
+  }
+
+  async getUser(id: string) {
+    return await this.userService.findOne(id);
+  }
+
+  async updateBalance(id: string, increment: number) {
+    return await this.userService.updateBalance(id, increment);
+  }
+
+  async deleteUser(id: string) {
+    return await this.userService.delete(id);
+  }
 }
