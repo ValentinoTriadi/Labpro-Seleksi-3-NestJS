@@ -1,0 +1,70 @@
+<div class="flex flex-col p-4 pt-4 lg:p-16 xl:p-24 lg:pt-6 xl:pt-8 text-slate-200">
+  {{!-- HEAD --}}
+  <div class="flex justify-between items-start select-none">
+    <div class="flex flex-col gap-2">
+      <h1 class="text-3xl font-medium text-slate-400">Hello, <b class="text-slate-200">{{username}}</b></h1>
+      <p class="text-yellow-200 text-2xl">🪙 {{balance}}</p>
+    </div>
+    <div>
+      <button onclick="logout()"
+        class="flex gap-3 px-8 py-2 bg-primary font-semibold text-slate-200 rounded-md shadow-xl hover:bg-[#252525] hover:scale-[110%] transition-all duration-300 group">
+        <p>Logout</p>
+        <p>↩</p>
+      </button>
+    </div>
+  </div>
+
+  {{!-- FILMS --}}
+  {{#if (notEmpty films)}}
+  <h1 class="text-3xl font-bold mt-10">Watch Film 😊</h1>
+  <div class="select-none grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-full mt-8">
+    {{#each films}}
+    <a class="cursor-pointer hover:bg-[#242424] hover:scale-[103%] bg-primary rounded-lg shadow-lg transition-all duration-150"
+      href="/films/{{id}}">
+      <div class="w-full h-full max-w-xl p-4 lg:p-8 flex flex-col gap-2">
+        <div class="aspect-square w-full flex items-center justify-center">
+          <img src="{{cover_image_url}}" alt="{{title}}" width="245" height="245"
+            class="aspect-square rounded-lg object-fill" />
+        </div>
+        <div class="flex flex-col justify-between items-between h-full">
+          <div>
+            <h2 class="text-xl font-bold break-all">{{title}} ({{release_year}})</h2>
+            <p class="text-xs text-slate-500">{{durationString}}</p>
+          </div>
+          <div>
+            <div class="flex gap-1 w-full flex-wrap py-2">
+              {{#each genre}}
+              {{> chip text=this size="xs" pad="2"}}
+              {{/each}}
+            </div>
+            <p class="text-[#4b70f5] text-sm break-all">by: {{director}}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+    {{/each}}
+  </div>
+  {{else}}
+  <div class="w-full flex flex-col items-center justify-center py-10 gap-10">
+    <h1 class="text-3xl font-bold">🥺Oh No! You don't have any film to watch🥺</h1>
+    <button
+      class="flex gap-3 px-8 py-2 bg-primary font-semibold text-slate-200 rounded-md shadow-xl hover:bg-[#252525] hover:bg-primary/80 hover:scale-[110%] transition-all duration-300 group">
+      <a href="/films">Browse Films</a>
+    </button>
+  </div>
+  {{/if}}
+</div>
+
+<script>
+  async function logout() {
+    const origin = window.location.origin
+    await fetch(origin + '/logout', {
+      method: 'POST',
+
+    })
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+    window.location.reload();
+  }
+</script>

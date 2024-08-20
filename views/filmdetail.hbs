@@ -1,0 +1,100 @@
+<div class="flex flex-col gap-2 p-4 pt-4 lg:p-16 xl:p-24 lg:pt-6 xl:pt-8 text-slate-200">
+  {{!-- Head --}}
+  <div class="flex justify-between items-center">
+    <a class="cursor-pointer" href="/films">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 lg:h-12 w-6 lg:w-12" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+    </a>
+    {{#if owned}}
+    {{#if (not watch)}}
+    <button onclick="watchFilm()"
+      class="bg-orange-600 hover:bg-orange-500 text-slate-200 px-4 py-2 rounded-lg shadow-lg text-[#1d1d1d] font-semibold transition-all duration-300">
+      🎬 Watch Film 🎬
+    </button>
+    {{/if}}
+    {{else}}
+    {{#if isAffordable}}
+    <button onclick="buyFilm()"
+      class="bg-green-800 hover:bg-green-700 px-4 py-2 rounded-lg shadow-lg font-semibold transition-all duration-300">
+      💲 Buy Film 💲
+    </button>
+    {{else}}
+    <button disabled="true"
+      class="bg-green-800 opacity-40 cursor-not-allowed px-4 py-2 rounded-lg shadow-lg font-semibold transition-all duration-300">
+      💲 Buy Film 💲
+    </button>
+    {{/if}}
+    {{/if}}
+  </div>
+
+  {{!-- Watch --}}
+  {{#if watch}}
+  {{#if owned}}
+  <div class="flex items-center justify-center w-full mt-5">
+    <video src="{{video_url}}" controls class="w-full max-w-[1000px] rounded-lg shadow-lg"></video>
+  </div>
+  {{/if}}
+  {{/if}}
+
+  {{!-- Detail --}}
+  <div class="w-full flex flex-col xl:flex-row gap-4 py-8 items-center justify-center">
+
+    {{!-- Poster --}}
+    {{#if (not watch)}}
+    <div class="relative w-full xl:w-1/3 flex items-center justify-center">
+      <div class="relative">
+        <div class="absolute text-yellow-200 top-0 left-0 select-none">🪙 {{price}}</div>
+        <div class="flex w-[500px] aspect-square items-center justify-center">
+          <img class="rounded-lg shadow-xl object-contain w-[500px] h-[500px]" src="{{cover_image_url}}" alt="{{title}}" width="500"
+            height="500">
+        </div>
+      </div>
+    </div>
+    {{/if}}
+
+    {{!-- Info --}}
+    <div class="flex flex-col w-full xl:w-2/3 gap-5 justify-center">
+      <div class="flex flex-col justify-center p-2 bg-[#1d1d1d] rounded-lg shadow-lg py-5">
+        <h1 class="m-5 text-3xl lg:text-4xl xl:text-6xl font-bold text-center xl:text-left">{{title}}</h1>
+        <p class="m-4 mt-0 text-md text-slate-400 text-left break-all">
+          {{description}}
+        </p>
+        <p class="mx-4 text-lg text-[#4b70f5] text-left">Director: <span class="text-slate-200">{{director}}</span></p>
+        <p class="mx-4 text-lg text-[#4b70f5] text-left">Release Date: <span
+            class="text-slate-200">{{release_year}}</span></p>
+        <div class="mx-4 text-lg text-[#4b70f5] text-left flex gap-2">Genre:
+          {{#each genre}}
+          {{> chip text=this size="sm" pad="4"}}
+          {{/each}}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function buyFilm() {
+    const loc = window.location.origin + window.location.pathname;
+    let message = "hehe";
+    const res = fetch(`${loc}/buy`, {
+      method: 'POST',
+    }).then(data => {
+      console.log(data);
+      alert(data.message);
+      message = data.message;
+    })
+      .catch(err => console.error(err));
+    window.location.reload();
+    window.location.reload();
+    window.location.reload();
+    window.location.reload();
+    window.location.reload();
+  }
+
+  function watchFilm() {
+    window.location.search = "?mode=watch";
+  }
+</script>

@@ -1,0 +1,51 @@
+<div class="flex justify-center items-start p-24">
+  <div class="w-full max-w-md shadow-xl">
+    <div class="bg-primary p-8 rounded-lg shadow-lg">
+      <h1 class="text-4xl text-center text-slate-200 font-bold mb-4 select-none">Login</h1>
+
+      {{#if (eqs status "success")}}
+      {{> toastsuccess message="Login successfully"}}
+      {{/if}}
+
+      {{#if (eqs status "error")}}
+      {{> toasterror}}
+      {{/if}}
+
+
+      <form action="/login" method="POST">
+        {{!-- Email Field --}}
+        <div class="mb-4">
+          <label for="username" class="block text-slate-200 text-sm font-bold mb-2 select-none">Email/Username</label>
+          <input value="{{username}}"
+            class="placeholder:text-slate-500 border-slate-500 shadow appearance-none border rounded w-full py-2 px-3 text-slate-200 bg-primary leading-tight outline-none focus:shadow-outline focus:border-blue-500 transition-all duration-300"
+            id="username" type="text" name="username" placeholder="Email@example.com" required>
+        </div>
+
+        {{!-- Password Field --}}
+        <div class="mb-6">
+          <label for="password" class="block text-slate-200 text-sm font-bold mb-2 select-none">Password</label>
+          <style>
+            ::-ms-reveal,
+            ::-ms-reveal {
+              filter: invert(100%);
+            }
+          </style>
+          <input
+            class="placeholder:text-slate-500 border-slate-500 shadow appearance-none border rounded w-full py-2 px-3 text-slate-200 bg-primary leading-tight outline-none focus:shadow-outline focus:border-blue-500 transition-all duration-300"
+            id="password" type="password" name="password" placeholder="••••••••" required>
+        </div>
+
+        {{!-- Submit Button --}}
+        <button
+          class="w-full bg-[#4b70f5] hover:bg-[#4c3bcf] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-300 select-none"
+          type="submit">
+          Sign In
+        </button>
+
+        {{!-- Register Link --}}
+        <a class="w-full inline-block align-baseline text-center text-sm text-blue-700 hover:text-blue-600 hover:underline hover:underline-offset-2 transition-all duration-300 select-none"
+          href="/register">Doesn't have an account?</a>
+      </form>
+    </div>
+  </div>
+</div>

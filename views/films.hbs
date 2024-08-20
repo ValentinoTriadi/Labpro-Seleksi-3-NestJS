@@ -1,0 +1,134 @@
+<div class="flex flex-col p-4 pt-4 lg:p-16 xl:p-24 lg:pt-6 xl:pt-8 text-slate-200">
+  {{!-- HEAD --}}
+  <div class="flex flex-col items-start select-none gap-4">
+    <h1 class="w-full text-5xl font-bold text-center lg:text-start">Films</h1>
+    <form class="w-full" action='/films'>
+      <input type="text" placeholder="Search for a film" name="q" value="{{q}}"
+        class="placeholder:text-slate-500 border-slate-600 shadow-lg appearance-none border rounded w-full py-2 px-3 text-slate-200 bg-primary leading-tight outline-none focus:shadow-outline focus:border-[#4c3bcf] transition-all duration-300" />
+    </form>
+  </div>
+
+  {{!-- FILMS --}}
+  <div class="select-none grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 w-full mt-8">
+    {{#each films}}
+    <a class="cursor-pointer hover:bg-[#242424] hover:scale-[103%] bg-primary rounded-lg shadow-lg transition-all duration-150"
+      href="/films/{{id}}">
+      <div class="w-full h-full max-w-xl p-4 lg:p-8 flex flex-col gap-2">
+        <div class="aspect-square w-full flex items-center justify-center">
+          <img src="{{cover_image_url}}" alt="{{title}}" width="245" height="245"
+            class="aspect-square rounded-lg object-fill" />
+        </div>
+        <div class="flex flex-col justify-between items-between h-full">
+          <div>
+            <h2 class="text-xl font-bold break-all">{{title}} ({{release_year}})</h2>
+            <p class="text-xs text-slate-500">{{durationString}}</p>
+          </div>
+          <div>
+            <div class="flex gap-1 w-full flex-wrap py-2">
+              {{#each genre}}
+              {{> chip text=this size="xs" pad="2"}}
+              {{/each}}
+            </div>
+            <p class="text-[#4b70f5] text-sm break-all">by: {{director}}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+    {{/each}}
+  </div>
+
+  {{!-- Pagination --}}
+  <div class="flex justify-center items-center gap-4 mt-8 select-none">
+    {{#if hasPrevious}}
+    <button onclick="prevPage()"
+      class="w-[40px] cursor-pointer aspect-square text-center hover:bg-[#252525] bg-primary text-slate-200 p-2 rounded-lg shadow-lg transition-all duration-150">
+      ◀
+    </button>
+    <button onclick="jumpPage({{prevPage}})"
+      class="w-[40px] cursor-pointer aspect-square text-center hover:bg-[#252525] bg-primary text-slate-200 p-2 rounded-lg shadow-lg transition-all duration-150">
+      {{prevPage}}
+    </button>
+    {{else}}
+    <div class="w-[40px]"></div>
+    <div class=" w-[40px]"></div>
+    {{/if}}
+
+    {{#if (or hasPrevious hasNext)}}
+    <div
+      class="w-[40px] aspect-square text-center bg-[#4c3bcf]/80 text-slate-200 p-2 rounded-lg shadow-lg transition-all duration-150">
+      {{page}}
+    </div>
+    {{/if}}
+
+    {{#if hasNext}}
+    <button onclick="jumpPage({{nextPage}})"
+      class="w-[40px] cursor-pointer aspect-square text-center hover:bg-[#252525] bg-primary text-slate-200 p-2 rounded-lg shadow-lg transition-all duration-150">
+      {{nextPage}}
+    </button>
+    <button onclick="nextPage()"
+      class="w-[40px] cursor-pointer aspect-square text-center hover:bg-[#252525] bg-primary text-slate-200 p-2 rounded-lg shadow-lg transition-all duration-150">
+      ▶
+    </button>
+    {{else}}
+    <div class="w-[40px]"></div>
+    <div class=" w-[40px]"></div>
+    {{/if}}
+  </div>
+</div>
+
+<script>
+  function prevPage() {
+    const temp = window.location.search;
+    const splitedQ = temp.split("&")
+
+    if (!splitedQ.some((item) => item.includes("page"))) {
+      splitedQ.push(`page=${parseInt({{ page }})}`);
+    }
+
+    const newSearch = splitedQ.map((item) => {
+      if (item.includes("page")) {
+        const page = item.split("=")[1];
+        return `page=${parseInt(page) - 1}`;
+      }
+      return item;
+    }).join("&");
+    window.location.search = newSearch;
+  }
+
+  function nextPage() {
+    const temp = window.location.search;
+    const splitedQ = temp.split("&")
+    console.log(splitedQ)
+
+    if (!splitedQ.some((item) => item.includes("page"))) {
+      splitedQ.push(`page=${parseInt({{ page }})}`);
+    }
+
+    const newSearch = splitedQ.map((item) => {
+      if (item.includes("page")) {
+        const page = item.split("=")[1];
+        return `page=${parseInt(page) + 1}`;
+      }
+      return item;
+    }).join("&");
+    window.location.search = newSearch;
+  }
+
+  function jumpPage(targetPage) {
+    const temp = window.location.search;
+    const splitedQ = temp.split("&")
+
+    if (!splitedQ.some((item) => item.includes("page"))) {
+      splitedQ.push(`page=${targetPage}`);
+    }
+
+    const newSearch = splitedQ.map((item) => {
+      if (item.includes("page")) {
+        return `page=${targetPage}`;
+      }
+      return item;
+    }).join("&");
+    window.location.search = newSearch;
+  }
+
+</script>
