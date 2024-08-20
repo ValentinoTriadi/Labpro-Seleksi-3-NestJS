@@ -88,6 +88,9 @@ export class AppController {
     @Res() response: Response,
     @Req() request: Request & { cookies: { jwt: string } },
   ) {
+    if (!request.user) {
+      response.redirect('/login');
+    }
     // @ts-expect-error because we know that user is not null
     const { id } = request.user;
     const films = await this.appService.getOwnedFilms(id);

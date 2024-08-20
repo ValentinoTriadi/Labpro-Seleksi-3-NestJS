@@ -15,8 +15,6 @@ import { ProtectedRouteMiddleware } from './middleware/ProtectedRoute.middleware
 import { FileService } from './file/file.service';
 import { FileController } from './file/file.controller';
 import { FileModule } from './file/file.module';
-import { UserModule } from './api/user/user.module';
-import { UsersModule } from './api/users/users.module';
 
 @Module({
   imports: [
@@ -30,7 +28,6 @@ import { UsersModule } from './api/users/users.module';
       signOptions: { expiresIn: '1d' },
     }),
     FileModule,
-    UsersModule,
   ],
   controllers: [AppController, FileController],
   providers: [AppService, FilmsService, UserService, FileService],

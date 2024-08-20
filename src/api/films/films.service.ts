@@ -392,7 +392,7 @@ export class FilmsService {
           data: null,
         };
       }
-      const { cover_image_url, ...rest } = result;
+      const { cover_image_url, video_url, ...rest } = result;
 
       // Delete existing cover image
       if (cover_image_url) {
@@ -400,8 +400,8 @@ export class FilmsService {
       }
 
       // Delete existing video
-      if (rest.video_url) {
-        await this.fileService.deleteFile(rest.video_url);
+      if (video_url) {
+        await this.fileService.deleteFile(video_url);
       }
 
       return {

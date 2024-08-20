@@ -2,14 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { RegisterDto } from './dto/user.dto';
 import { Bcrypt } from 'src/utils/bcrypt';
+import { ROLE } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async findAll() {
+  async findAll(q?: string) {
     try {
-      const users = await this.databaseService.user.findMany();
+      const where = q ? { username: { contains: q } } : {};
+      const users = await this.databaseService.user.findMany({
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          balance: true,
+        },
+        where: {
+          ...where,
+          role: {
+            not: ROLE.ADMIN,
+          },
+        },
+      });
       return {
         status: 'success',
         message: 'Users fetched successfully',
@@ -27,6 +42,12 @@ export class UserService {
   async findOne(id: string) {
     try {
       const user = await this.databaseService.user.findUnique({
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          balance: true,
+        },
         where: { id },
       });
       if (!user) {
@@ -249,6 +270,79 @@ export class UserService {
       return user.balance;
     } catch (error) {
       return 0;
+    }
+  }
+
+  async updateBalance(userId: string, inc: number) {
+    try {
+      const user = await this.findOne(userId);
+      if (user.status === 'error') {
+        return {
+          status: 'error',
+          message: 'User not found',
+          data: null,
+        };
+      }
+
+      const result = await this.databaseService.user.update({
+        where: { id: userId },
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          balance: true,
+        },
+        data: {
+          balance: {
+            increment: inc,
+          },
+        },
+      });
+      return {
+        status: 'success',
+        message: 'Balance updated successfully',
+        data: result,
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        message: error.message,
+        data: null,
+      };
+    }
+  }
+
+  async delete(id: string) {
+    try {
+      const user = await this.findOne(id);
+      if (user.status === 'error') {
+        return {
+          status: 'error',
+          message: 'User not found',
+          data: null,
+        };
+      }
+
+      const result = await this.databaseService.user.delete({
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          balance: true,
+        },
+        where: { id },
+      });
+      return {
+        status: 'success',
+        message: 'User deleted successfully',
+        data: result,
+      };
+    } catch (error) {
+      return {
+        status: 'error',
+        message: error.message,
+        data: null,
+      };
     }
   }
 }
