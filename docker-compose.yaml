@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  # Database service using PostgreSQL image
+  database:
+    image: postgres:latest  
+    container_name: database
+    restart: always
+    environment:
+      POSTGRES_DB: Nelfix  
+      POSTGRES_USER: postgres    
+      POSTGRES_PASSWORD: VCTriadi261104  
+    ports:
+      - "5432:5432"
+
+  # Backend service
+  backend:
+    container_name: nest-api
+    build: . 
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    env_file:
+      - .env
