@@ -93,7 +93,7 @@ Nelfix is a web-based application that provides a variety of films for users to 
 
 | Design Pattern | Description                                                                                  |
 | -------------- | -------------------------------------------------------------------------------------------- |
-| Singleton      | Used for utils class that only need 1 instance (e.g src\utils\bcrypt.ts & src\utils\time.ts) |
+| Singleton      | Used for utils class that only need 1 instance (e.g `src/utils/bcrypt.ts` & `src/utils/time.ts`) |
 | Strategy       | Used for file storage bucket implementation to make calls easier.                            |
 | Factory        | Used for creating a new instance of PrismaClient for a specific use.                         |
 
