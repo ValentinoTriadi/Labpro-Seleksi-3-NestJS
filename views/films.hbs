@@ -1,4 +1,4 @@
-<div class="flex flex-col p-4 pt-4 lg:p-16 xl:p-24 lg:pt-6 xl:pt-8 text-slate-200">
+<div id="films-content" class="flex flex-col p-4 pt-4 lg:p-16 xl:p-24 lg:pt-6 xl:pt-8 text-slate-200">
   {{!-- HEAD --}}
   <div class="flex flex-col items-start select-none gap-4">
     <h1 class="w-full text-5xl font-bold text-center lg:text-start">Films</h1>
@@ -130,5 +130,22 @@
     }).join("&");
     window.location.search = newSearch;
   }
+
+  const pollDuration = 10000;
+  setInterval(() => {
+    const temp = window.location.href;
+    fetch(temp, {
+      method: 'GET',
+    })
+      .then(res => res.text())
+      .then(data => {
+        const doc = new DOMParser().parseFromString(data, 'text/html');
+        const newContent = doc.getElementById('films-content');
+        const oldContent = document.getElementById('films-content');
+        oldContent.innerHTML = newContent.innerHTML;
+      })
+      .catch(err => console.error(err));
+    console.log("Polling");
+  }, pollDuration);
 
 </script>
