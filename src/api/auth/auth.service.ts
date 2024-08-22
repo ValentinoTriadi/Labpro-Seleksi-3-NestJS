@@ -6,18 +6,14 @@ import { Bcrypt } from 'src/utils/bcrypt';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
-export class AuthService {
-  constructor(
-    private jwtService: JwtService,
-    private databaseService: DatabaseService,
-    private readonly userService: UserService,
-  ) {}
-
+export class AuthService extends UserService {
+  constructor(private jwtService: JwtService) {
+    super(new DatabaseService());
+  }
   async login({ username, password }: LoginDto) {
     try {
       // Find existing user
-      const existingUser =
-        await this.userService.findByEmailOrUsername(username);
+      const existingUser = await this.findByEmailOrUsername(username);
       if (!existingUser || !existingUser.data) {
         return {
           status: 'error',
@@ -95,21 +91,5 @@ export class AuthService {
       message: 'User logged out',
       data: null,
     };
-  }
-
-  async getUsers(q?: string) {
-    return await this.userService.findAll(q);
-  }
-
-  async getUser(id: string) {
-    return await this.userService.findOne(id);
-  }
-
-  async updateBalance(id: string, increment: number) {
-    return await this.userService.updateBalance(id, increment);
-  }
-
-  async deleteUser(id: string) {
-    return await this.userService.delete(id);
   }
 }

@@ -32,13 +32,13 @@ export class AuthController {
   @Get('users')
   @UseGuards(AdminOnlyGuard)
   async users(@Headers('Authorization') token: string, @Query('q') q?: string) {
-    return await this.authService.getUsers(q);
+    return await this.authService.findAll(q);
   }
 
   @Get('users/:id')
   @UseGuards(AdminOnlyGuard)
   async user(@Headers('Authorization') token: string, @Param('id') id: string) {
-    return await this.authService.getUser(id);
+    return await this.authService.findOne(id);
   }
 
   @Post('users/:id/balance')
@@ -58,6 +58,6 @@ export class AuthController {
     @Headers('Authorization') token: string,
     @Param('id') id: string,
   ) {
-    return await this.authService.deleteUser(id);
+    return await this.authService.delete(id);
   }
 }

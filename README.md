@@ -45,6 +45,9 @@
       <ul>
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#features">Features</a></li>
+        <li><a href="#Design-Pattern">Design Pattern</a></li>
+        <li><a href="#API-Endpoints">API Endpoints</a></li>
+        <li><a href="#bonus">Bonus</a></li>
       </ul>
     </li>
     <li><a href="#requirement">Requirement</a></li>
@@ -96,6 +99,9 @@ Nelfix is a web-based application that provides a variety of films for users to 
 
 ### API Endpoints
 
+`Notes: ALL ENDPOINT FOR ADMIN ARE USING prefix /api`  
+`fe-admin-endpoint should be: https://localhost:3000/api`
+
 #### USERS API
 
     | Method | Endpoint           | request | Description                  |
@@ -123,14 +129,14 @@ Nelfix is a web-based application that provides a variety of films for users to 
 
 #### Route
 
-    | Route      | Description         | Additional |
-    | ---------- | ------------------- | ---------- |
-    | /          | Home Page           |            |
-    | /films     | Browse Film Page    | ?q=        |
-    | /films/:id | Film Detail Page    |            |
-    | /login     | Login Page          |            |
-    | /register  | Register Page       |            |
-    | /dashboard | User Dashboard Page |            |
+    | Route      | Description         | Additional      |
+    | ---------- | ------------------- | ----------      |
+    | /          | Home Page           |                 |
+    | /films     | Browse Film Page    | ?q=&take=&page= |
+    | /films/:id | Film Detail Page    |                 |
+    | /login     | Login Page          |                 |
+    | /register  | Register Page       |                 |
+    | /dashboard | User Dashboard Page |                 |
 
 ### Bonus
 
@@ -140,13 +146,65 @@ Checkbox that has been completed:
 - [❌] ~~B02 - Deployment~~
 - [✅] B03 - Polling
 - [❌] ~~B04 - Caching~~
-- [❌] ~~B05 - Lighthouse~~
+- [✅] B05 - Lighthouse
 - [✅] B06 - Responsive Layout
-- [✅] B07 - Dokumentasi API `http://localhost:3000/swagger`
-- [❌] ~~B08 - SOLID~~
+- [✅] B07 - Dokumentasi API
+- [✅] ~~B08 - SOLID~~
 - [❌] ~~B09 - Automated Testing~~
 - [❌] ~~B10 - Fitur Tambahan~~
 - [✅] B11 - Ember
+
+#### Lighthouse
+
+[Home](public/LightHouse/Home.html)  
+![Home](public/LightHouse/Home.png)
+[Dashboard](public/LightHouse/Dashboard.html)
+![Dashboard](public/LightHouse/dashboard.png)
+[Film](public/LightHouse/Film.html)  
+![Film](public/LightHouse/Film.png)
+[Film Detail](public/LightHouse/FilmDetail.html)  
+![Film Detail](public/LightHouse/FilmDetail.png)
+[Login](public/LightHouse/Login.html)  
+![Login](public/LightHouse/Login.png)
+[Register](public/LightHouse/Register.html)  
+![Register](public/LightHouse/Register.png)
+
+#### Dokumentasi API
+
+`http://localhost:3000/swagger`
+
+#### SOLID
+
+**Single Responsibility**  
+ Membuat class untuk masing-masing kebutuhan yang berbeda, sehingga class tersebut hanya memiliki satu tanggung jawab.
+Contoh:
+
+- Class `DatabaseService` hanya bertanggung jawab untuk mengatur koneksi ke database.
+- Class `UserService` hanya bertanggung jawab untuk mengatur user.
+
+**Open/Closed Principle**
+Membuat class yang dapat di-extend tanpa harus mengubah class tersebut.
+Contoh:
+
+- Class `FileService` dapat di-extend dengan mudah tanpa harus mengubah class tersebut. Bisa hanya dengan menambahkan class baru yang meng-implement `FileStrategy`.
+
+**Liskov Substitution Principle**
+Membuat class yang dapat disubstitusikan dengan class turunannya.
+Contoh:
+
+- Class `PrismaClient` dapat disubstitusi dengan class turunannya yaitu `DatabaseService`.
+
+**Interface Segregation**
+Membuat class yang menggunakan interface yang selalu digunakan dan tidak memaksakan menggunakan interface yang tidak dipakai.
+Contoh:
+
+- Class `GetFileStrategy`, `UploadFileStrategy`, dan `DeleteFileStrategy` yang mengimplementasikan interface `FileStrategy`.
+
+**Dependency Inversion**
+Membuat class yang memiliki dependensi terhadap abstrak/interface bukan terhadap class lain yang lebih rendah.
+Contoh:
+
+- Class `FileService` yang bergantung pada interface `FileStrategy` daripada bergantung dengan class dibawahnya seperti `GetFileStrategy`, `UploadFileStrategy`, dan `DeleteFileStrategy`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
