@@ -180,6 +180,7 @@ Checkbox that has been completed:
    ```sh
    npx prisma generate
    npx prisma migrate dev
+   npx prisma db seed
    ```
 5. ```sh
    pnpm start:dev

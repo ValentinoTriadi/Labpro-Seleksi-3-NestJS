@@ -37,7 +37,7 @@ async function bootstrap() {
       layoutsDir: join(__dirname, '..', 'views'),
       helpers: {
         eqs: (a: string, b: string) => a === b,
-        notEmpty: (a: any) => a.length > 0,
+        notEmpty: (a: any) => a && a.length > 0,
         or: (a: boolean, b: boolean) => a || b,
         not: (a: boolean) => !a,
       },
