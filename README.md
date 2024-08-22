@@ -156,7 +156,7 @@ Checkbox that has been completed:
 
 #### Deployment
 
-<a>`https://nelfix-92f540f5e562.herokuapp.com/`</a>
+[`https://nelfix-92f540f5e562.herokuapp.com/`](https://nelfix-92f540f5e562.herokuapp.com/)
 
 #### Lighthouse
 
