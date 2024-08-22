@@ -8,7 +8,6 @@ export class AdminOnlyGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context.switchToHttp().getRequest();
     const user = this.authService.selfInfo(request.headers.authorization);
-    console.log(user);
     return user.data.role === 'ADMIN';
   }
 }

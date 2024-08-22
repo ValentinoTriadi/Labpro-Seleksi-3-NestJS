@@ -6,6 +6,9 @@ import { DatabaseService } from 'src/database/database.service';
 import { FileService } from 'src/file/file.service';
 import { v4 as uuidv4 } from 'uuid';
 import { PageFilmDto } from './dto/page-film.dto';
+import { UploadFileStrategy } from 'src/file/strategy/upload.strategy';
+import { GetFileStrategy } from 'src/file/strategy/get.strategy';
+import { DeleteFileStrategy } from 'src/file/strategy/delete.strategy';
 
 @Injectable()
 export class FilmsService {
@@ -18,14 +21,23 @@ export class FilmsService {
     try {
       const uuid = uuidv4();
       const { video, cover_image, ...rest } = createFilmDto;
+      this.fileService.setStrategy(new UploadFileStrategy());
       const data = await {
         ...rest,
         id: uuid,
         video_url: video
-          ? await this.fileService.uploadFile(video, uuid, 'video/mp4')
+          ? await this.fileService.execute({
+              file: video,
+              id: uuid,
+              type: 'video/mp4',
+            })
           : '',
         cover_image_url: cover_image
-          ? await this.fileService.uploadFile(cover_image, uuid, 'image/png')
+          ? await this.fileService.execute({
+              file: cover_image,
+              id: uuid,
+              type: 'image/png',
+            })
           : null,
       };
 
@@ -120,9 +132,12 @@ export class FilmsService {
         take: +take,
       });
 
+      this.fileService.setStrategy(new GetFileStrategy());
       result.map((film) => {
         if (film.cover_image_url) {
-          film.cover_image_url = this.fileService.getFile(film.cover_image_url);
+          film.cover_image_url = this.fileService.execute({
+            link: film.cover_image_url,
+          });
         } else {
           film.cover_image_url = '/images/default.png';
         }
@@ -201,9 +216,12 @@ export class FilmsService {
         },
       });
 
+      this.fileService.setStrategy(new GetFileStrategy());
       result.map((film) => {
         if (film.cover_image_url) {
-          film.cover_image_url = this.fileService.getFile(film.cover_image_url);
+          film.cover_image_url = this.fileService.execute({
+            link: film.cover_image_url,
+          });
         } else {
           film.cover_image_url = '/images/default.png';
         }
@@ -249,16 +267,17 @@ export class FilmsService {
         };
       }
 
+      this.fileService.setStrategy(new GetFileStrategy());
       if (result.cover_image_url) {
-        result.cover_image_url = this.fileService.getFile(
-          result.cover_image_url,
-        );
+        result.cover_image_url = this.fileService.execute({
+          link: result.cover_image_url,
+        });
       } else {
         result.cover_image_url = '/images/default.png';
       }
 
       if (result.video_url !== '') {
-        result.video_url = this.fileService.getFile(result.video_url);
+        result.video_url = this.fileService.execute({ link: result.video_url });
       } else {
         result.video_url = '/videos/default.mp4';
       }
@@ -280,6 +299,7 @@ export class FilmsService {
   async update(id: string, updateFilmDto: UpdateFilmDto) {
     try {
       const { video, cover_image, ...rest } = updateFilmDto;
+      this.fileService.setStrategy(new UploadFileStrategy());
 
       const data: {
         cover_image_url: string | null;
@@ -294,13 +314,21 @@ export class FilmsService {
       } = await {
         ...rest,
         cover_image_url: cover_image
-          ? await this.fileService.uploadFile(cover_image, id, 'image/png')
+          ? await this.fileService.execute({
+              file: cover_image,
+              id: id,
+              type: 'image/png',
+            })
           : null,
       };
 
       let video_url = null;
       if (video) {
-        video_url = await this.fileService.uploadFile(video, id, 'video/mp4');
+        video_url = await this.fileService.execute({
+          file: video,
+          id: id,
+          type: 'video/mp4',
+        });
       }
 
       if (video_url) {
@@ -393,15 +421,16 @@ export class FilmsService {
         };
       }
       const { cover_image_url, video_url, ...rest } = result;
+      this.fileService.setStrategy(new DeleteFileStrategy());
 
       // Delete existing cover image
       if (cover_image_url) {
-        await this.fileService.deleteFile(cover_image_url);
+        await this.fileService.execute({ link: cover_image_url });
       }
 
       // Delete existing video
       if (video_url) {
-        await this.fileService.deleteFile(video_url);
+        await this.fileService.execute({ link: video_url });
       }
 
       return {
@@ -443,13 +472,14 @@ export class FilmsService {
       }
 
       const tempResult = result.films.map((film) => film.film);
+      this.fileService.setStrategy(new GetFileStrategy());
 
       await Promise.all(
         tempResult.map(async (film) => {
           if (film.cover_image_url) {
-            film.cover_image_url = await this.fileService.getFile(
-              film.cover_image_url,
-            );
+            film.cover_image_url = await this.fileService.execute({
+              link: film.cover_image_url,
+            });
           } else {
             film.cover_image_url = '/images/default.png';
           }

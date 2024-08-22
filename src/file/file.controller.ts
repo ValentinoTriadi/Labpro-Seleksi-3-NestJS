@@ -3,12 +3,13 @@ import {
   Get,
   Post,
   Query,
-  Render,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileService } from './file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadFileStrategy } from './strategy/upload.strategy';
+import { GetFileStrategy } from './strategy/get.strategy';
 
 @Controller('file')
 export class FileController {
@@ -20,14 +21,19 @@ export class FileController {
     const buffer = file?.buffer;
     const id = file?.originalname;
     const type = file.mimetype;
-    const link = await this.fileService.uploadFile(buffer!, id!, type);
+    this.fileService.setStrategy(new UploadFileStrategy());
+    const link = await this.fileService.execute({
+      file: buffer!,
+      id,
+      type,
+    });
     return link;
   }
 
   @Get('show')
-  @Render('show')
   async showFile(@Query('link') link: string) {
-    const file = await this.fileService.getFile(link);
+    this.fileService.setStrategy(new GetFileStrategy());
+    const file = await this.fileService.execute({ link });
     return { file: file };
   }
 }
