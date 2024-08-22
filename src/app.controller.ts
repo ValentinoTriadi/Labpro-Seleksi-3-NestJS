@@ -81,9 +81,9 @@ export class AppController {
       });
   }
 
-  @UseGuards(AuthenticatedGuard)
   @Get('dashboard')
   @Render('dashboard')
+  @UseGuards(AuthenticatedGuard)
   async dashboard(
     @Res() response: Response,
     @Req() request: Request & { cookies: { jwt: string } },

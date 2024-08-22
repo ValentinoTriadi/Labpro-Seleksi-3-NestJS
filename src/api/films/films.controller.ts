@@ -7,17 +7,20 @@ import {
   Delete,
   Query,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { FilmsService } from './films.service';
 import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
 import { FormDataRequest, MemoryStoredFile } from 'nestjs-form-data';
+import { AdminOnlyGuard } from '../auth/guards/admin-only.guard';
 
 @Controller('api/films')
 export class FilmsController {
   constructor(private readonly filmsService: FilmsService) {}
 
   @Post()
+  @UseGuards(AdminOnlyGuard)
   @FormDataRequest({ storage: MemoryStoredFile })
   create(@Body() createFilmDto: CreateFilmDto) {
     if (typeof createFilmDto.genre === 'string') {
@@ -33,16 +36,19 @@ export class FilmsController {
   }
 
   @Get()
+  @UseGuards(AdminOnlyGuard)
   findAll(@Query('q') q?: string) {
     return this.filmsService.findAll(q);
   }
 
   @Get(':id')
+  @UseGuards(AdminOnlyGuard)
   findOne(@Param('id') id: string) {
     return this.filmsService.findOne(id);
   }
 
   @Put(':id')
+  @UseGuards(AdminOnlyGuard)
   @FormDataRequest({ storage: MemoryStoredFile })
   update(@Param('id') id: string, @Body() updateFilmDto: UpdateFilmDto) {
     if (typeof updateFilmDto.genre === 'string') {
@@ -58,6 +64,7 @@ export class FilmsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminOnlyGuard)
   remove(@Param('id') id: string) {
     return this.filmsService.remove(id);
   }
