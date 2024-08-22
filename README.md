@@ -237,7 +237,8 @@ Contoh:
 2. ```sh
    pnpm install
    ```
-3. Add Environment Variables (modify .env.example to .env and fill in the required fields)
+3. Add Environment Variables (modify `.env.example` to `.env` and fill in the required fields)  
+   Note: For docker, use `.env.production.local` instead of `.env`
 4. Set Up Database
    ```sh
    npx prisma generate

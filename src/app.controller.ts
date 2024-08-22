@@ -136,7 +136,7 @@ export class AppController {
     @Query('mode') mode?: string,
   ) {
     const film = await this.appService.getFilmById(id);
-    if (!film.data) {
+    if (!film.data || !film.data.price) {
       response.redirect('/films');
     }
 
@@ -150,7 +150,8 @@ export class AppController {
       userBalance = await this.appService.getUserBalance(userId);
     }
 
-    const isAffordable = userBalance >= film.data!.price;
+    const isAffordable =
+      userBalance >= (film.data ? film.data.price : 999999999999);
 
     return {
       ...request.user,
