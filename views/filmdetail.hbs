@@ -45,10 +45,10 @@
     {{#if (not watch)}}
     <div class="relative w-full xl:w-1/3 flex items-center justify-center">
       <div class="relative">
-        <div class="absolute text-yellow-200 top-0 left-0 select-none">🪙 {{price}}</div>
+        <div class="absolute text-yellow-200 top-0 right-0 select-none">🪙 {{price}}</div>
         <div class="flex w-[500px] aspect-square items-center justify-center">
-          <img class="rounded-lg shadow-xl object-contain w-[500px] h-[500px]" src="{{cover_image_url}}" alt="{{title}}" width="500"
-            height="500">
+          <img class="rounded-lg shadow-xl object-contain w-[500px] h-[500px]" src="{{cover_image_url}}" alt="{{title}}"
+            width="500" height="500">
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
         <p class="mx-4 text-lg text-[#4b70f5] text-left">Director: <span class="text-slate-200">{{director}}</span></p>
         <p class="mx-4 text-lg text-[#4b70f5] text-left">Release Date: <span
             class="text-slate-200">{{release_year}}</span></p>
-        <div class="mx-4 text-lg text-[#4b70f5] text-left flex gap-2">Genre:
+        <div class="mx-4 text-lg text-[#4b70f5] text-left flex flex-wrap gap-2">Genre:
           {{#each genre}}
           {{> chip text=this size="sm" pad="4"}}
           {{/each}}
