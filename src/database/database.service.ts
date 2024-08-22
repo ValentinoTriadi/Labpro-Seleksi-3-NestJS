@@ -16,3 +16,21 @@ export class DatabaseService extends PrismaClient implements OnModuleInit {
     await this.$connect();
   }
 }
+
+@Injectable()
+export class DatabaseServiceFactory {
+  createUserDatabaseService() {
+    const db = new DatabaseService();
+    return db.user;
+  }
+
+  createFilmDatabaseService() {
+    const db = new DatabaseService();
+    return db.film;
+  }
+
+  createBoughtFilmDatabaseService() {
+    const db = new DatabaseService();
+    return db.boughtFilm;
+  }
+}

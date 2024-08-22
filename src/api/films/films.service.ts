@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
 import { Prisma } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
+import {
+  DatabaseService,
+  DatabaseServiceFactory,
+} from 'src/database/database.service';
 import { FileService } from 'src/file/file.service';
 import { v4 as uuidv4 } from 'uuid';
 import { PageFilmDto } from './dto/page-film.dto';
@@ -14,6 +17,7 @@ import { DeleteFileStrategy } from 'src/file/strategy/delete.strategy';
 export class FilmsService {
   constructor(
     private readonly databaseService: DatabaseService,
+    private readonly databaseServiceFactory: DatabaseServiceFactory,
     private readonly fileService: FileService,
   ) {}
 
@@ -42,13 +46,15 @@ export class FilmsService {
       };
 
       // existing title and director at the same yaer handler
-      const existingFilm = await this.databaseService.film.findFirst({
-        where: {
-          title: data.title,
-          director: data.director,
-          release_year: data.release_year,
-        },
-      });
+      const existingFilm = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .findFirst({
+          where: {
+            title: data.title,
+            director: data.director,
+            release_year: data.release_year,
+          },
+        });
       if (existingFilm) {
         return {
           status: 'error',
@@ -59,9 +65,11 @@ export class FilmsService {
       }
 
       // create film
-      const result = await this.databaseService.film.create({
-        data,
-      });
+      const result = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .create({
+          data,
+        });
       return {
         status: 'success',
         message: 'Film created successfully',
@@ -107,30 +115,34 @@ export class FilmsService {
           }
         : {};
 
-      const count = await this.databaseService.film.count({
-        where,
-      });
+      const count = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .count({
+          where,
+        });
 
-      const result = await this.databaseService.film.findMany({
-        where,
-        orderBy: {
-          created_at: 'desc',
-        },
-        select: {
-          id: true,
-          title: true,
-          director: true,
-          release_year: true,
-          genre: true,
-          price: true,
-          duration: true,
-          cover_image_url: true,
-          created_at: true,
-          updated_at: true,
-        },
-        skip,
-        take: +take,
-      });
+      const result = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .findMany({
+          where,
+          orderBy: {
+            created_at: 'desc',
+          },
+          select: {
+            id: true,
+            title: true,
+            director: true,
+            release_year: true,
+            genre: true,
+            price: true,
+            duration: true,
+            cover_image_url: true,
+            created_at: true,
+            updated_at: true,
+          },
+          skip,
+          take: +take,
+        });
 
       this.fileService.setStrategy(new GetFileStrategy());
       result.map((film) => {
@@ -200,21 +212,23 @@ export class FilmsService {
           }
         : {};
 
-      const result = await this.databaseService.film.findMany({
-        where,
-        select: {
-          id: true,
-          title: true,
-          director: true,
-          release_year: true,
-          genre: true,
-          price: true,
-          duration: true,
-          cover_image_url: true,
-          created_at: true,
-          updated_at: true,
-        },
-      });
+      const result = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .findMany({
+          where,
+          select: {
+            id: true,
+            title: true,
+            director: true,
+            release_year: true,
+            genre: true,
+            price: true,
+            duration: true,
+            cover_image_url: true,
+            created_at: true,
+            updated_at: true,
+          },
+        });
 
       this.fileService.setStrategy(new GetFileStrategy());
       result.map((film) => {
@@ -252,11 +266,13 @@ export class FilmsService {
 
   async findOne(id: string) {
     try {
-      const result = await this.databaseService.film.findUnique({
-        where: {
-          id,
-        },
-      });
+      const result = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .findUnique({
+          where: {
+            id,
+          },
+        });
 
       // check if films exist
       if (!result) {
@@ -343,14 +359,16 @@ export class FilmsService {
 
       if (where.title && where.director && where.release_year) {
         // existing title and director at the same year handler
-        const existingFilm = await this.databaseService.film.findFirst({
-          where: {
-            ...where,
-            NOT: {
-              id,
+        const existingFilm = await this.databaseServiceFactory
+          .createFilmDatabaseService()
+          .findFirst({
+            where: {
+              ...where,
+              NOT: {
+                id,
+              },
             },
-          },
-        });
+          });
         if (existingFilm) {
           return {
             status: 'error',
@@ -361,22 +379,26 @@ export class FilmsService {
         }
       }
 
-      const film = await this.databaseService.film.findUnique({
-        where: {
-          id,
-        },
-      });
+      const film = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .findUnique({
+          where: {
+            id,
+          },
+        });
 
       // update film
-      const result = await this.databaseService.film.update({
-        where: {
-          id,
-        },
-        data: {
-          ...data,
-          cover_image_url: data.cover_image_url ?? film?.cover_image_url,
-        },
-      });
+      const result = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .update({
+          where: {
+            id,
+          },
+          data: {
+            ...data,
+            cover_image_url: data.cover_image_url ?? film?.cover_image_url,
+          },
+        });
 
       return {
         status: 'success',
@@ -394,23 +416,25 @@ export class FilmsService {
 
   async remove(id: string) {
     try {
-      const result = await this.databaseService.film.delete({
-        where: {
-          id,
-        },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          director: true,
-          release_year: true,
-          genre: true,
-          video_url: true,
-          cover_image_url: true,
-          created_at: true,
-          updated_at: true,
-        },
-      });
+      const result = await this.databaseServiceFactory
+        .createFilmDatabaseService()
+        .delete({
+          where: {
+            id,
+          },
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            director: true,
+            release_year: true,
+            genre: true,
+            video_url: true,
+            cover_image_url: true,
+            created_at: true,
+            updated_at: true,
+          },
+        });
 
       // check if films exist
       if (!result) {
@@ -450,18 +474,20 @@ export class FilmsService {
 
   async findOwnFilms(userId: string) {
     try {
-      const result = await this.databaseService.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          films: {
-            select: {
-              film: true,
+      const result = await this.databaseServiceFactory
+        .createUserDatabaseService()
+        .findUnique({
+          where: {
+            id: userId,
+          },
+          select: {
+            films: {
+              select: {
+                film: true,
+              },
             },
           },
-        },
-      });
+        });
 
       if (!result) {
         return {
@@ -511,14 +537,16 @@ export class FilmsService {
 
   async isFilmOwned(filmId: string, userId: string) {
     try {
-      const result = await this.databaseService.boughtFilm.findUnique({
-        where: {
-          filmId_userId: {
-            filmId,
-            userId,
+      const result = await this.databaseServiceFactory
+        .createBoughtFilmDatabaseService()
+        .findUnique({
+          where: {
+            filmId_userId: {
+              filmId,
+              userId,
+            },
           },
-        },
-      });
+        });
 
       if (!result) {
         return {
@@ -563,12 +591,14 @@ export class FilmsService {
         };
       }
 
-      const result = await this.databaseService.boughtFilm.create({
-        data: {
-          filmId,
-          userId,
-        },
-      });
+      const result = await this.databaseServiceFactory
+        .createBoughtFilmDatabaseService()
+        .create({
+          data: {
+            filmId,
+            userId,
+          },
+        });
 
       if (!result) {
         return {
@@ -578,7 +608,7 @@ export class FilmsService {
         };
       }
 
-      await this.databaseService.user.update({
+      await this.databaseServiceFactory.createUserDatabaseService().update({
         where: {
           id: userId,
         },

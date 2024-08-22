@@ -176,7 +176,6 @@ export class AppController {
     // @ts-expect-error because we know that user is not null
     const { id: userId } = request.user;
     const res = await this.appService.buyFilm(id, userId);
-    console.log(res);
     return res;
   }
 
