@@ -156,7 +156,7 @@ Checkbox that has been completed:
 
 #### Deployment
 
-`https://nelfix-92f540f5e562.herokuapp.com/`
+<a>`https://nelfix-92f540f5e562.herokuapp.com/`</a>
 
 #### Lighthouse
 
@@ -186,25 +186,25 @@ Contoh:
 - Class `DatabaseService` hanya bertanggung jawab untuk mengatur koneksi ke database.
 - Class `UserService` hanya bertanggung jawab untuk mengatur user.
 
-**Open/Closed Principle**
+**Open/Closed Principle**  
 Membuat class yang dapat di-extend tanpa harus mengubah class tersebut.
 Contoh:
 
 - Class `FileService` dapat di-extend dengan mudah tanpa harus mengubah class tersebut. Bisa hanya dengan menambahkan class baru yang meng-implement `FileStrategy`.
 
-**Liskov Substitution Principle**
+**Liskov Substitution Principle**  
 Membuat class yang dapat disubstitusikan dengan class turunannya.
 Contoh:
 
 - Class `PrismaClient` dapat disubstitusi dengan class turunannya yaitu `DatabaseService`.
 
-**Interface Segregation**
+**Interface Segregation**  
 Membuat class yang menggunakan interface yang selalu digunakan dan tidak memaksakan menggunakan interface yang tidak dipakai.
 Contoh:
 
 - Class `GetFileStrategy`, `UploadFileStrategy`, dan `DeleteFileStrategy` yang mengimplementasikan interface `FileStrategy`.
 
-**Dependency Inversion**
+**Dependency Inversion**  
 Membuat class yang memiliki dependensi terhadap abstrak/interface bukan terhadap class lain yang lebih rendah.
 Contoh:
 
@@ -253,7 +253,7 @@ Contoh:
 
 ## Deployment
 
-Application is deployed on Vercel on [`https://sea-salon-theta.vercel.app/`](https://sea-salon-theta.vercel.app/)
+Application is deployed on Heroku on [`https://nelfix-92f540f5e562.herokuapp.com/`](https://nelfix-92f540f5e562.herokuapp.com/)
 <br/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
