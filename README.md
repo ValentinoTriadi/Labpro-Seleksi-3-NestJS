@@ -143,7 +143,7 @@ Nelfix is a web-based application that provides a variety of films for users to 
 Checkbox that has been completed:
 
 - [❌] ~~B01 - OWASP~~
-- [❌] ~~B02 - Deployment~~
+- [✅] B02 - Deployment
 - [✅] B03 - Polling
 - [❌] ~~B04 - Caching~~
 - [✅] B05 - Lighthouse
@@ -153,6 +153,10 @@ Checkbox that has been completed:
 - [❌] ~~B09 - Automated Testing~~
 - [❌] ~~B10 - Fitur Tambahan~~
 - [✅] B11 - Ember
+
+#### Deployment
+
+`https://nelfix-92f540f5e562.herokuapp.com/`
 
 #### Lighthouse
 
